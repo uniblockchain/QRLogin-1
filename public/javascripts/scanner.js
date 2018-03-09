@@ -1,5 +1,4 @@
 (function() {
-  window.QRLogin = {}
   window.QRLogin.decode = 'reading'
   if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
     window.QRLogin.decode = 'no device available'

@@ -4,7 +4,7 @@
  * Module dependencies.
  */
 
-var app = require('../app');
+var app = require('./app');
 var debug = require('debug')('qrlogin:server');
 var http = require('http');
 
@@ -21,10 +21,10 @@ app.set('port', port);
 
 var server = http.createServer(app);
 var io = require('socket.io')(server);
-var socketCb = require('../socket');
-io.on('connection', (socket) => {
-  socketCb(socket)
-});
+var onConnection = require('./socket');
+io.on('connection', function (socket) {
+  onConnection(socket)
+})
 
 /**
  * Listen on provided port, on all network interfaces.
