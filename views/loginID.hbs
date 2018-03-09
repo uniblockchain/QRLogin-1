@@ -2,8 +2,19 @@
 
 
 <div class="text-center">
-  <canvas id="qrcode_canvas"></canvas>
-  <h3>LoginID: 1234</h3>
+  <canvas id="qrcode_login" width="300" height="300"></canvas>
+
+  <h3>LoginID: {{ loginID }}</h3>
 </div>
 
-<script src="/javascripts/loginIdGenerator.min.js"></script>
+<!-- <script src="/javascripts/loginIdGenerator.min.js"></script> -->
+<script type="text/javascript">
+  var canvas = document.getElementById("qrcode_login");
+  var context = canvas.getContext('2d');
+
+  var image = new Image();
+  image.onload = function() {
+    context.drawImage(image, 0, 0);
+  };
+  image.src = '{{ qrcode_url }}'
+</script>

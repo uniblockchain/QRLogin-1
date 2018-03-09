@@ -1,5 +1,7 @@
 var express = require('express');
 var router = express.Router();
+const QRCode = require('qrcode')
+
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
@@ -11,7 +13,13 @@ router.get('/scanner', (req, res, next) => {
 })
 
 router.get('/loginID', (req, res, next) => {
-  res.render('loginID')
+  let qrcode_url;
+  let loginID = 654321
+  const targetUrl = req.protocol + '://' + req.headers.host + '?' + loginID
+  QRCode.toDataURL(targetUrl, { errorCorrectionLevel: 'H', width: 300 }, function (err, url) {
+    qrcode_url = url
+    res.render('loginID', { qrcode_url, loginID })
+  })
 })
 
 router.get('/userPage', (req, res, next) => {
