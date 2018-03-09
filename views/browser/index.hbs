@@ -1,0 +1,42 @@
+
+<h1 class="text-center">Scan QRCode below to Login</h1>
+
+<div class="text-center">
+    <canvas id="qrcode_verify" width="300" height="300"></canvas>
+</div>
+
+
+
+<script src="/javascripts/qrcode.min.js"></script>
+<script type="text/javascript">
+  (function () {
+    var roomIdArr = []
+    function getRandomIntInclusive(min, max) {
+      min = Math.ceil(min);
+      max = Math.floor(max);
+      return Math.floor(Math.random() * (max - min + 1)) + min; //The maximum is inclusive and the minimum is inclusive
+    }
+    for (var i = 0; i < 6; i++) {
+      roomIdArr[i] = getRandomIntInclusive(0, 9)
+    }
+
+    var urlToCanvas = roomIdArr.join('')
+
+    QRCode.toCanvas(document.getElementById('qrcode_verify'), urlToCanvas, { errorCorrectionLevel: 'H', width: 300 }, function (err, canvas) {
+      if (err) return console.log(err);
+
+      var int = setInterval(function () {
+        if (window.QRLogin) {
+          clearInterval(int)
+          var socket = window.QRLogin.socket
+          socket.emit('page login qrcode ready', urlToCanvas)
+
+          socket.on('gotcha', function (data) {
+            location = '/userPage'
+          })
+        }
+      });
+
+    })
+  }())
+</script>

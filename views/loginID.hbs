@@ -7,14 +7,14 @@
   <h3>LoginID: {{ loginID }}</h3>
 </div>
 
-<!-- <script src="/javascripts/loginIdGenerator.min.js"></script> -->
+
 <script src="/javascripts/qrcode.min.js"></script>
 <script type="text/javascript">
-  var urlToCanvas = location.protocol + '//' + location.host + '?loginid=' + '{{ loginID }}'
-  console.log(urlToCanvas);
+  (function () {
+    var urlToCanvas = location.protocol + '//' + location.host + '/scanBrowser' + '?loginid=' + '{{ loginID }}'
 
-  QRCode.toCanvas(document.getElementById('qrcode_login'), urlToCanvas, { errorCorrectionLevel: 'H' }, function (err, canvas) {
-    if (err) return console.log(err);
-    console.log(canvas);
-  })
+    QRCode.toCanvas(document.getElementById('qrcode_login'), urlToCanvas, { errorCorrectionLevel: 'H' }, function (err, canvas) {
+      if (err) return console.log(err);
+    })
+  }())
 </script>

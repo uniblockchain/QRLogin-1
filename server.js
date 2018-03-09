@@ -20,6 +20,11 @@ app.set('port', port);
  */
 
 var server = http.createServer(app);
+
+/**
+ * Create socket.io
+ */
+
 var io = require('socket.io')(server);
 var onConnection = require('./socket');
 io.on('connection', function (socket) {

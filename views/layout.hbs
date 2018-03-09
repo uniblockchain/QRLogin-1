@@ -18,7 +18,11 @@
       {{{body}}}
     </div>
 
-
     <script src="/socket.io/socket.io.js"></script>
+    <script type="text/javascript">
+      window.QRLogin = {} // global object
+      var socket = io()
+      window.QRLogin.socket = socket
+    </script>
   </body>
 </html>
