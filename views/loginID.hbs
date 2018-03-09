@@ -8,13 +8,13 @@
 </div>
 
 <!-- <script src="/javascripts/loginIdGenerator.min.js"></script> -->
+<script src="/javascripts/qrcode.min.js"></script>
 <script type="text/javascript">
-  var canvas = document.getElementById("qrcode_login");
-  var context = canvas.getContext('2d');
+  var urlToCanvas = location.protocol + '//' + location.host + '?token=' + '{{ loginID }}'
+  console.log(urlToCanvas);
 
-  var image = new Image();
-  image.onload = function() {
-    context.drawImage(image, 0, 0);
-  };
-  image.src = '{{ qrcode_url }}'
+  QRCode.toCanvas(document.getElementById('qrcode_login'), urlToCanvas, { errorCorrectionLevel: 'H' }, function (err, canvas) {
+    if (err) return console.log(err);
+    console.log(canvas);
+  })
 </script>

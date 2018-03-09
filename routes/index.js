@@ -13,13 +13,8 @@ router.get('/scanner', (req, res, next) => {
 })
 
 router.get('/loginID', (req, res, next) => {
-  let qrcode_url;
   let loginID = 654321
-  const targetUrl = req.protocol + '://' + req.headers.host + '?' + loginID
-  QRCode.toDataURL(targetUrl, { errorCorrectionLevel: 'H', width: 300 }, function (err, url) {
-    qrcode_url = url
-    res.render('loginID', { qrcode_url, loginID })
-  })
+  res.render('loginID', { loginID })
 })
 
 router.get('/userPage', (req, res, next) => {
