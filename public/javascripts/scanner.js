@@ -1,5 +1,8 @@
 (function() {
+  window.QRLogin = {}
+  window.QRLogin.decode = 'reading'
   if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+    window.QRLogin.decode = 'no device available'
     return ('mediaDevices / getUserMedia not available in your browser')
   }
 
@@ -78,11 +81,20 @@
           // alert('failed');
           return searchQRcode()
         } else {
-          alert('decode ok');
-          var atag = document.getElementById('decode')
-          var t = document.createTextNode(res)
-          atag.appendChild(t)
-          atag.href = res
+          window.QRLogin.decode = 'ok'
+          if (!new URL(res)) return alert('Please scan a valid QRCode')
+
+          // var parsedUrl = new URL(res);
+          // if (parsedUrl.hostname === 'localhost') {
+          //   location = res
+          // } else {
+            // debugging only
+            $("#status").text("Scan Success")
+            var atag = document.getElementById('decode')
+            var t = document.createTextNode(res)
+            atag.appendChild(t)
+            atag.href = res
+          // }
         }
       }
 
@@ -93,6 +105,4 @@
   } // searchQRcode end
 
   startup()
-
-  var socket = io.connect()
 })()

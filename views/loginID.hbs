@@ -10,7 +10,7 @@
 <!-- <script src="/javascripts/loginIdGenerator.min.js"></script> -->
 <script src="/javascripts/qrcode.min.js"></script>
 <script type="text/javascript">
-  var urlToCanvas = location.protocol + '//' + location.host + '?token=' + '{{ loginID }}'
+  var urlToCanvas = location.protocol + '//' + location.host + '?loginid=' + '{{ loginID }}'
   console.log(urlToCanvas);
 
   QRCode.toCanvas(document.getElementById('qrcode_login'), urlToCanvas, { errorCorrectionLevel: 'H' }, function (err, canvas) {

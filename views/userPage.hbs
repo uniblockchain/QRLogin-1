@@ -1,1 +1,8 @@
-<h1 class="text-center">User Page</h1>
+<h1 class="text-center">
+  Welcome back
+  {{#if loginID}}
+    {{loginID}}
+  {{else}}
+    User
+  {{/if}}
+</h1>
