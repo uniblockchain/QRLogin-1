@@ -5,7 +5,7 @@ const QRCode = require('qrcode')
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  res.render('browser/index');
+  res.render('browser/index', { cookies: JSON.stringify(req.cookies) });
 });
 
 router.get('/loginID', (req, res, next) => {

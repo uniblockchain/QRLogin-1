@@ -92,7 +92,7 @@
               atag.appendChild(t)
               atag.href = res
 
-              socket.emit('scanned something', res)
+              socket.emit('device scanning done', res)
             }
           }
 

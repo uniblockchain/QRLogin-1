@@ -12,17 +12,13 @@ function onConnection(socket) {
     socketid: socket.id
   })}`);
 
-  socket.on('page login qrcode ready', (data) => {
-    console.log(`page login qrcode ready: ${data}`);
-
-    socket.join(data)
+  socket.on('browser login qrcode ready', (qrcode_str) => {
+    socket.join(qrcode_str)
   })
 
-  socket.on('scanned something', (data) => {
-    console.log(`scanned something: ${data}`);
-
-    socket.join(data)
-    socket.broadcast.to(data).emit('gotcha', socket_connect_sid)
+  socket.on('device scanning done', (qrcode_str) => {
+    socket.join(qrcode_str)
+    socket.broadcast.to(qrcode_str).emit('browser-device connected', '')
   })
 
 }
