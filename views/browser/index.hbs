@@ -37,8 +37,9 @@
 
           // Event receivers
           socket.on('browser-device connected', function (roomId, loginId) {
-            window.QRLogin.roomId = roomId
-            location = '/dashboard' + '?loginId=' + loginId
+            document.cookie = "roomId=" + roomId
+            document.cookie = "loginId=" + loginId
+            location = '/dashboard'
           })
         }
       });

@@ -21,8 +21,9 @@ router.get('/scanBrowser', (req, res, next) => {
 
 
 router.get('/dashboard', (req, res, next) => {
-  const loginId = req.query.loginId;
-  res.render('browser/dashboard', { loginId })
+  console.log(req.cookies);
+  const { roomId, loginId } = req.cookies
+  res.render('browser/dashboard', { roomId, loginId })
 })
 
 module.exports = router;
