@@ -1,7 +1,7 @@
-{{#if loginid}}
+{{#if loginId}}
 
-<h3 class="text-center">Welcome {{ loginid }}</h3>
-<h3 class="text-center">Step 2: Please scan QRCode on our page to login</h3>
+<h3 class="text-center">Welcome {{ loginId }}</h3>
+<h4 class="text-center">Step 2: Please scan QRCode on our page to login</h4>
 
 <div class="text-center">
   <video autoplay id="video">Video stream not available.</video>
@@ -17,9 +17,20 @@
 
 <script src="/javascripts/qrparser.min.js"></script>
 <script src="/javascripts/scanner.js"></script>
+<script type="text/javascript">
+  (function () {
+    var int = setInterval(function () {
+      if (window.QRLogin) {
+        clearInterval(int)
+        var QRLogin = window.QRLogin
+        QRLogin.loginId = '{{ loginId }}'
+      }
+    });
+  }())
+</script>
 
 {{else}}
 
-<h3>Please scan a loginID QRCode</h3>
+<h3>Please scan a loginId QRCode</h3>
 
 {{/if}}

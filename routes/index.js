@@ -8,20 +8,21 @@ router.get('/', function(req, res, next) {
   res.render('browser/index', { cookies: JSON.stringify(req.cookies) });
 });
 
-router.get('/loginID', (req, res, next) => {
-  let loginID = 654321
-  res.render('loginID', { loginID })
+router.get('/loginId', (req, res, next) => {
+  let loginId = 654321
+  res.render('loginId', { loginId })
 })
 
 router.get('/scanBrowser', (req, res, next) => {
-  const loginid = req.query.loginid
-  res.render('device/scanner', { loginid })
+  const loginId = req.query.loginId
+  res.render('device/scanner', { loginId })
 })
 
 
 
-router.get('/userPage', (req, res, next) => {
-  res.render('browser/userPage')
+router.get('/dashboard', (req, res, next) => {
+  const loginId = req.query.loginId;
+  res.render('browser/dashboard', { loginId })
 })
 
 module.exports = router;

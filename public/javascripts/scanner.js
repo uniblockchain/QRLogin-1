@@ -2,7 +2,11 @@
   var int = setInterval(function () {
     if (window.QRLogin) {
       clearInterval(int)
-      window.QRLogin.decode = 'reading'
+      var QRLogin = window.QRLogin
+      QRLogin.device = {}
+
+
+      QRLogin.device.decode = 'reading'
       if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
         window.QRLogin.decode = 'no device available'
         return ('mediaDevices / getUserMedia not available in your browser')
@@ -85,14 +89,14 @@
               // alert('failed');
               return searchQRcode()
             } else {
-              window.QRLogin.decode = 'ok'
+              QRLogin.device.decode = 'ok'
               $("#status").text("Scan Success")
               var atag = document.getElementById('decode')
               var t = document.createTextNode(res)
               atag.appendChild(t)
               atag.href = res
 
-              socket.emit('device scanning done', res)
+              socket.emit('device scanning done', res, QRLogin.loginId)
             }
           }
 

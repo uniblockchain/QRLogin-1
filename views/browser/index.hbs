@@ -2,7 +2,7 @@
 <h1 class="text-center">Scan QRCode below to Login</h1>
 
 <div class="text-center">
-    <canvas id="qrcode_verify" width="300" height="300"></canvas>
+    <canvas id="qrcode_browser" width="300" height="300"></canvas>
 </div>
 
 
@@ -10,25 +10,35 @@
 <script src="/javascripts/qrcode.min.js"></script>
 <script type="text/javascript">
   (function () {
+
+    // get connect.sid for canvas
     var cookies = {{{ cookies }}}
-    console.log(cookies);
-
     var stringToCanvas = cookies['connect.sid']
+    if (!cookies || !stringToCanvas) {
+      location.reload()
+    }
 
+    // generate browser qrcode
     QRCode.toCanvas(
-      document.getElementById('qrcode_verify'),
+      document.getElementById('qrcode_browser'),
       stringToCanvas,
       { errorCorrectionLevel: 'H', width: 100 }, function (err, canvas) {
       if (err) return console.log(err);
 
+      // getting the global window socket
       var int = setInterval(function () {
         if (window.QRLogin) {
           clearInterval(int)
           var socket = window.QRLogin.socket
-          socket.emit('browser login qrcode ready', stringToCanvas)
 
-          socket.on('browser-device connected', function (empty_str) {
-            location = '/userPage'
+          // Event emitters
+          socket.emit('browser qrcode ready', stringToCanvas)
+
+
+          // Event receivers
+          socket.on('browser-device connected', function (roomId, loginId) {
+            window.QRLogin.roomId = roomId
+            location = '/dashboard' + '?loginId=' + loginId
           })
         }
       });
