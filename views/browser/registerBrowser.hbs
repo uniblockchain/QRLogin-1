@@ -12,9 +12,9 @@
   (function () {
 
     // get connect.sid for canvas
-    var cookies = {{{ cookies }}}
-    var stringToCanvas = cookies['connect.sid']
-    if (!cookies || !stringToCanvas) {
+    var roomId = '{{ roomId }}'
+    var stringToCanvas = roomId
+    if (!roomId || !stringToCanvas) {
       location.reload()
     }
 
@@ -37,8 +37,6 @@
 
           // Event receivers
           socket.on('browser-device connected', function (roomId, loginId) {
-            document.cookie = "roomId=" + roomId
-            document.cookie = "loginId=" + loginId
             location = '/dashboard'
           })
         }

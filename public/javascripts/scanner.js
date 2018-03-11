@@ -3,12 +3,9 @@
     if (window.QRLogin) {
       clearInterval(int)
       var QRLogin = window.QRLogin
-      QRLogin.device = {}
 
 
-      QRLogin.device.decode = 'reading'
       if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
-        window.QRLogin.decode = 'no device available'
         return ('mediaDevices / getUserMedia not available in your browser')
       }
 
@@ -89,14 +86,12 @@
               // alert('failed');
               return searchQRcode()
             } else {
-              QRLogin.device.decode = 'ok'
               $("#status").text("Scan Success")
               var atag = document.getElementById('decode')
               var t = document.createTextNode(res)
               atag.appendChild(t)
               atag.href = res
-
-              socket.emit('device scanning done', res, QRLogin.loginId)
+              socket.emit('device scanning done', res, parseQueryString(location).loginId)
             }
           }
 
@@ -109,4 +104,18 @@
 
     }
   });
+
+  // utils
+  function parseQueryString( location ) {
+    var queryString = location.search.substring(1);
+    var params = {}, queries, temp, i, l;
+    // Split into key/value pairs
+    queries = queryString.split("&");
+    // Convert the array of strings into an object
+    for ( i = 0, l = queries.length; i < l; i++ ) {
+        temp = queries[i].split('=');
+        params[temp[0]] = temp[1];
+    }
+    return params;
+  };
 })()

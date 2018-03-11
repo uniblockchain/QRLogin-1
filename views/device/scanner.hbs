@@ -17,17 +17,6 @@
 
 <script src="/javascripts/qrparser.min.js"></script>
 <script src="/javascripts/scanner.js"></script>
-<script type="text/javascript">
-  (function () {
-    var int = setInterval(function () {
-      if (window.QRLogin) {
-        clearInterval(int)
-        var QRLogin = window.QRLogin
-        QRLogin.loginId = '{{ loginId }}'
-      }
-    });
-  }())
-</script>
 
 {{else}}
 

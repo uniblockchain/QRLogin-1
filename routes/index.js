@@ -5,7 +5,15 @@ const QRCode = require('qrcode')
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  res.render('browser/index', { cookies: JSON.stringify(req.cookies) });
+  let roomId = req.session.roomId
+  if (!roomId) {
+    generateRoomId(0, 9, 6).then((roomId) => {
+      req.session.roomId = roomId
+      res.render('browser/registerBrowser', { roomId: req.session.roomId });
+    })
+  } else {
+    res.render('browser/registerBrowser', { roomId: req.session.roomId });
+  }
 });
 
 router.get('/loginId', (req, res, next) => {
@@ -18,12 +26,25 @@ router.get('/scanBrowser', (req, res, next) => {
   res.render('device/scanner', { loginId })
 })
 
-
-
 router.get('/dashboard', (req, res, next) => {
-  console.log(req.cookies);
-  const { roomId, loginId } = req.cookies
+  const { roomId, loginId } = req.session
+  console.log(`/dashboard sess: ${JSON.stringify(req.session)}`);
   res.render('browser/dashboard', { roomId, loginId })
 })
 
 module.exports = router;
+
+
+// utils
+function generateRoomId(min, max, roomIdLength) {
+  if(!min) min = 0
+  if(!max) max = 9
+  if(!roomIdLength) roomIdLength = 4
+  min = Math.ceil(min);
+  max = Math.floor(max);
+  var tmpArr = []
+  for (var i = 0; i < roomIdLength; i++) {
+    tmpArr[i] = Math.floor(Math.random() * (max - min + 1)) + min;
+  }
+  return Promise.resolve(tmpArr.join(''))
+}

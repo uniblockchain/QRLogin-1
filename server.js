@@ -7,6 +7,40 @@
 var app = require('./app');
 var debug = require('debug')('qrlogin:server');
 var http = require('http');
+var session = require('express-session');
+var sess = {
+  secret: 'our QRLogin secret',
+  resave: false,
+  saveUninitialized: true,
+  cookie: { maxAge: 2 * 60 * 60 * 1000 } // milliseconds
+}
+if (app.get('env') === 'production') {
+  app.set('trust proxy', 1) // trust first proxy
+  sess.cookie.secure = true // serve secure cookies
+}
+var sessMiddleware = session(sess)
+app.use(sessMiddleware)
+
+var index = require('./routes/index');
+app.use('/', index);
+
+// catch 404 and forward to error handler
+app.use(function(req, res, next) {
+  var err = new Error('Not Found');
+  err.status = 404;
+  next(err);
+});
+
+// error handler
+app.use(function(err, req, res, next) {
+  // set locals, only providing error in development
+  res.locals.message = err.message;
+  res.locals.error = req.app.get('env') === 'development' ? err : {};
+
+  // render the error page
+  res.status(err.status || 500);
+  res.render('error');
+});
 
 /**
  * Get port from environment and store in Express.
@@ -22,11 +56,13 @@ app.set('port', port);
 var server = http.createServer(app);
 
 /**
- * Create socket.io
+ * Socket.io
  */
-
 var io = require('socket.io')(server);
-var onConnection = require('./socket');
+io.use(function(socket, next) {
+    sessMiddleware(socket.request, socket.request.res, next);
+});
+var onConnection  = require('./socket');
 io.on('connection', function (socket) {
   onConnection(socket)
 })
