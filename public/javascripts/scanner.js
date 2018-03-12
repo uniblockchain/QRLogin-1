@@ -64,7 +64,7 @@
             canvas.setAttribute('height', height);
             streaming = true;
 
-            searchQRcode(canvas, width, height, function (res) {
+            searchQRcode(canvas, video, width, height, function (res) {
               $("#status").text("Scan Success")
               socket.emit('device scanning done', res, parseQueryString(location).loginId)
             });
@@ -78,7 +78,7 @@
   }); // interval end
 
   // utils
-  function searchQRcode(canvas, width, height, successCb) {
+  function searchQRcode(canvas, video, width, height, successCb) {
     var context = canvas.getContext('2d');
     if (width && height) {
       canvas.width = width;
@@ -89,7 +89,7 @@
       qrcode.callback = function (res) {
         if (res instanceof Error) {
           // alert('failed');
-          return searchQRcode(canvas, width, height, successCb)
+          return searchQRcode(canvas, video, width, height, successCb)
         } else {
           return successCb(res)
         }
