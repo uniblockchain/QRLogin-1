@@ -23,12 +23,12 @@ router.get('/loginId', (req, res, next) => {
 
 router.get('/scanBrowser', (req, res, next) => {
   const loginId = req.query.loginId
-  res.render('device/scanner', { loginId })
+  res.render('device/scanner', { loginId, session: JSON.stringify(req.session) })
 })
 
 router.get('/dashboard', (req, res, next) => {
   const { roomId, loginId } = req.session
-  res.render('browser/dashboard', { roomId, loginId })
+  res.render('browser/dashboard', { roomId, loginId, session: JSON.stringify(req.session) })
 })
 
 router.post('/updateSess', (req, res, next) => {
