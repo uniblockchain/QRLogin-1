@@ -17,7 +17,6 @@
       var streaming = false;
 
       var video = null;
-      var canvas = null;
       var photo = null;
       var startbutton = null;
 
@@ -25,7 +24,6 @@
 
       function startup() {
         video = document.getElementById('video');
-        canvas = document.getElementById('canvas');
         photo = document.getElementById('photo');
         startbutton = document.getElementById('startbutton');
 
@@ -53,18 +51,16 @@
               alert(err);
           });
 
-        // sizing the video and canvas tag once according to stream
+        // sizing the video once according to stream
         video.addEventListener('canplay', function(ev){
           if (!streaming) {
             height = video.videoHeight / (video.videoWidth/width);
 
             video.setAttribute('width', width);
             video.setAttribute('height', height);
-            canvas.setAttribute('width', width);
-            canvas.setAttribute('height', height);
             streaming = true;
 
-            searchQRcode(canvas, video, width, height, function (res) {
+            searchQRcode(video, function (res) {
               $("#status").text("Scan Success")
               socket.emit('device scanning done', res, parseQueryString(location).loginId)
             });
@@ -78,25 +74,30 @@
   }); // interval end
 
   // utils
-  function searchQRcode(canvas, video, width, height, successCb) {
+  function searchQRcode(video, successCb) {
+    var canvas = document.createElement("canvas")
     var context = canvas.getContext('2d');
-    if (width && height) {
-      canvas.width = width;
-      canvas.height = height;
-      context.drawImage(video, 0, 0, width, height);
-      var data = canvas.toDataURL('image/png');
+    var width = video.videoWidth
+    var height = video.videoHeight
 
-      qrcode.callback = function (res) {
-        if (res instanceof Error) {
-          // alert('failed');
-          return searchQRcode(canvas, video, width, height, successCb)
-        } else {
-          return successCb(res)
-        }
+    canvas.width = width;
+    canvas.height = height;
+    context.drawImage(video, 0, 0, width, height);
+    var data = canvas.toDataURL('image/png');
+
+    qrcode.callback = function (res) {
+      if (res instanceof Error) {
+        // alert('failed');
+        $(canvas).remove()
+        return searchQRcode(video, successCb)
+      } else {
+        $(canvas).remove()
+        return successCb(res)
       }
-
-      qrcode.decode(data);
     }
+
+    qrcode.decode(data);
+
   } // searchQRcode end
 
   function parseQueryString( location ) {
