@@ -5,6 +5,9 @@
     <canvas id="qrcode_browser" width="300" height="300"></canvas>
 </div>
 
+<div class="text-center">
+  req.session: {{{ session }}}
+</div>
 
 
 <script src="/javascripts/qrcode.min.js"></script>
@@ -13,15 +16,14 @@
 
     // get connect.sid for canvas
     var roomId = '{{ roomId }}'
-    var stringToCanvas = roomId
-    if (!roomId || !stringToCanvas) {
+    if (!roomId) {
       location.reload()
     }
 
     // generate browser qrcode
     QRCode.toCanvas(
       document.getElementById('qrcode_browser'),
-      stringToCanvas,
+      roomId,
       { errorCorrectionLevel: 'H', width: 100 }, function (err, canvas) {
       if (err) return console.log(err);
 
@@ -32,12 +34,26 @@
           var socket = window.QRLogin.socket
 
           // Event emitters
-          socket.emit('browser qrcode ready', stringToCanvas)
-
+          socket.emit('browser qrcode ready', roomId)
 
           // Event receivers
           socket.on('browser-device connected', function (roomId, loginId) {
-            location = '/dashboard'
+            var data = { roomId: roomId, loginId: loginId }
+            console.log(data);
+
+            $.ajax({
+              method: "POST",
+              url: '/updateSess',
+              data: JSON.stringify(data),
+              contentType : 'application/json',
+              success: function( msg ) {
+                console.log( msg );
+                location = '/dashboard'
+              },
+              error: function( msg ) {
+                console.log(msg)
+              }
+            })
           })
         }
       });

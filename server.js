@@ -10,7 +10,7 @@ var http = require('http');
 var session = require('express-session');
 var sess = {
   secret: 'our QRLogin secret',
-  resave: false,
+  resave: true,
   saveUninitialized: true,
   cookie: { maxAge: 2 * 60 * 60 * 1000 } // milliseconds
 }
@@ -59,9 +59,6 @@ var server = http.createServer(app);
  * Socket.io
  */
 var io = require('socket.io')(server);
-io.use(function(socket, next) {
-    sessMiddleware(socket.request, socket.request.res, next);
-});
 var onConnection  = require('./socket');
 io.on('connection', function (socket) {
   onConnection(socket)

@@ -9,10 +9,10 @@ router.get('/', function(req, res, next) {
   if (!roomId) {
     generateRoomId(0, 9, 6).then((roomId) => {
       req.session.roomId = roomId
-      res.render('browser/registerBrowser', { roomId: req.session.roomId });
+      res.render('browser/registerBrowser', { roomId: req.session.roomId, session: JSON.stringify(req.session) });
     })
   } else {
-    res.render('browser/registerBrowser', { roomId: req.session.roomId });
+    res.render('browser/registerBrowser', { roomId: req.session.roomId, session: JSON.stringify(req.session) });
   }
 });
 
@@ -28,8 +28,14 @@ router.get('/scanBrowser', (req, res, next) => {
 
 router.get('/dashboard', (req, res, next) => {
   const { roomId, loginId } = req.session
-  console.log(`/dashboard sess: ${JSON.stringify(req.session)}`);
   res.render('browser/dashboard', { roomId, loginId })
+})
+
+router.post('/updateSess', (req, res, next) => {
+  const { roomId, loginId } = req.body
+  req.session.roomId = roomId
+  req.session.loginId = loginId
+  res.status(200).send('updateSess ok')
 })
 
 module.exports = router;
