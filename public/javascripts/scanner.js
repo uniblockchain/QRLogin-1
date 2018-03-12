@@ -64,41 +64,41 @@
             canvas.setAttribute('height', height);
             streaming = true;
 
-            searchQRcode();
+            searchQRcode(canvas, width, height, function (res) {
+              $("#status").text("Scan Success")
+              socket.emit('device scanning done', res, parseQueryString(location).loginId)
+            });
           }
         }, false);
       } // startup end
 
-
-      function searchQRcode() {
-        var context = canvas.getContext('2d');
-        if (width && height) {
-          canvas.width = width;
-          canvas.height = height;
-          context.drawImage(video, 0, 0, width, height);
-          var data = canvas.toDataURL('image/png');
-
-          qrcode.callback = function (res) {
-            if (res instanceof Error) {
-              // alert('failed');
-              return searchQRcode()
-            } else {
-              $("#status").text("Scan Success")
-              socket.emit('device scanning done', res, parseQueryString(location).loginId)
-            }
-          }
-
-          qrcode.decode(data);
-        }
-      } // searchQRcode end
-
-
       startup()
 
     }
-  });
+  }); // interval end
 
   // utils
+  function searchQRcode(canvas, width, height, successCb) {
+    var context = canvas.getContext('2d');
+    if (width && height) {
+      canvas.width = width;
+      canvas.height = height;
+      context.drawImage(video, 0, 0, width, height);
+      var data = canvas.toDataURL('image/png');
+
+      qrcode.callback = function (res) {
+        if (res instanceof Error) {
+          // alert('failed');
+          return searchQRcode(canvas, width, height, successCb)
+        } else {
+          return successCb(res)
+        }
+      }
+
+      qrcode.decode(data);
+    }
+  } // searchQRcode end
+
   function parseQueryString( location ) {
     var queryString = location.search.substring(1);
     var params = {}, queries, temp, i, l;
