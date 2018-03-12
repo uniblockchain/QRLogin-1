@@ -1,5 +1,5 @@
 
-<h1 class="text-center">Login</h1>
+<h1 class="text-center">Browser QRCode:</h1>
 
 <div class="text-center">
     <canvas id="qrcode_browser" width="300" height="300"></canvas>
@@ -19,7 +19,7 @@
     // generate browser qrcode
     QRCode.toCanvas(
       document.getElementById('qrcode_browser'),
-      roomId,
+      'roomId:' + roomId,
       { errorCorrectionLevel: 'H', width: 100 }, function (err, canvas) {
       if (err) return console.log(err);
 

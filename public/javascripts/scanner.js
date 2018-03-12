@@ -8,8 +8,11 @@
       var video = document.getElementById('video');
       startup(video, function (video) {
         searchQRcode(video, function (res) {
+          var roomId = res.split('roomId:')[1]
+          if (!roomId) return alert('Please scan a valid browser QRCode')
+
           $("#status").text("Scan Success")
-          socket.emit('device scanning done', res, parseQueryString(location).loginId)
+          socket.emit('device scanning done', roomId, parseQueryString(location).loginId)
         });
       })
     }
