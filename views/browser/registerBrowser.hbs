@@ -1,5 +1,5 @@
 
-<h1 class="text-center">Scan QRCode below to Login</h1>
+<h1 class="text-center">Login</h1>
 
 <div class="text-center">
     <canvas id="qrcode_browser" width="300" height="300"></canvas>
@@ -39,7 +39,7 @@
 
             $.ajax({
               method: "POST",
-              url: '/updateSess',
+              url: '/uponLogin',
               data: JSON.stringify(data),
               contentType : 'application/json',
               success: function( msg ) {

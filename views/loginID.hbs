@@ -11,7 +11,7 @@
 <script src="/javascripts/qrcode.min.js"></script>
 <script type="text/javascript">
   (function () {
-    var urlToCanvas = location.protocol + '//' + location.host + '/scanBrowser' + '?loginId=' + '{{ loginId }}'
+    var urlToCanvas = location.protocol + '//' + location.host + '/scanner' + '?loginId=' + '{{ loginId }}'
 
     QRCode.toCanvas(document.getElementById('qrcode_login'), urlToCanvas, { errorCorrectionLevel: 'H' }, function (err, canvas) {
       if (err) return console.log(err);

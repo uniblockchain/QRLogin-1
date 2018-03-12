@@ -71,9 +71,6 @@
 
 
       function searchQRcode() {
-        var p = document.getElementById('decode')
-        p.innerHTML = ''
-
         var context = canvas.getContext('2d');
         if (width && height) {
           canvas.width = width;
@@ -87,10 +84,6 @@
               return searchQRcode()
             } else {
               $("#status").text("Scan Success")
-              var atag = document.getElementById('decode')
-              var t = document.createTextNode(res)
-              atag.appendChild(t)
-              atag.href = res
               socket.emit('device scanning done', res, parseQueryString(location).loginId)
             }
           }

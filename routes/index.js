@@ -5,7 +5,10 @@ const QRCode = require('qrcode')
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  let roomId = req.session.roomId
+  let { roomId, loginId } = req.session
+  if (roomId && loginId) {
+    return res.redirect('/dashboard')
+  }
   if (!roomId) {
     generateRoomId(0, 9, 6).then((roomId) => {
       req.session.roomId = roomId
@@ -21,21 +24,27 @@ router.get('/loginId', (req, res, next) => {
   res.render('loginId', { loginId })
 })
 
-router.get('/scanBrowser', (req, res, next) => {
+router.get('/scanner', (req, res, next) => {
   const loginId = req.query.loginId
   res.render('device/scanner', { loginId, session: JSON.stringify(req.session) })
 })
 
 router.get('/dashboard', (req, res, next) => {
   const { roomId, loginId } = req.session
+  if (!roomId || !loginId) {
+    return res.redirect('/')
+  }
   res.render('browser/dashboard', { roomId, loginId, session: JSON.stringify(req.session) })
 })
 
-router.post('/updateSess', (req, res, next) => {
+router.post('/uponLogin', (req, res, next) => {
   const { roomId, loginId } = req.body
+  if (!roomId || !loginId) {
+    return res.status(400).send('Please provide roomId and loginId in req body')
+  }
   req.session.roomId = roomId
   req.session.loginId = loginId
-  res.status(200).send('updateSess ok')
+  res.status(200).send('uponLogin ok')
 })
 
 module.exports = router;
