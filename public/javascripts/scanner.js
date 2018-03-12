@@ -12,6 +12,9 @@
           if (!roomId) return alert('Please scan a valid browser QRCode')
 
           $("#status").text("Scan Success")
+          setTimeout(function () {
+            location = '/scanFinish'
+          }, 1000);
           socket.emit('device scanning done', roomId, parseQueryString(location).loginId)
         });
       })

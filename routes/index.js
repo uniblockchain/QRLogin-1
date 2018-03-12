@@ -29,6 +29,10 @@ router.get('/scanner', (req, res, next) => {
   res.render('device/scanner', { loginId, session: JSON.stringify(req.session) })
 })
 
+router.get('/scanFinish', (req, res, next) => {
+  res.render('device/scanFinish')
+})
+
 router.get('/dashboard', (req, res, next) => {
   const { roomId, loginId } = req.session
   if (!roomId || !loginId) {

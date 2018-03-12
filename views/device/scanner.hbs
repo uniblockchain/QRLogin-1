@@ -1,15 +1,13 @@
 {{#if loginId}}
 
-<h3 class="text-center">Welcome {{ loginId }}</h3>
-<h4 class="text-center">Step 2: Please scan QRCode on our page to login</h4>
+<h3 class="text-center">LoginId: {{ loginId }}</h3>
+<p class="text-center">Please scan a browser QRCode to login</p>
 
 <div class="text-center">
   <video id="video">Video stream not available.</video>
 
   <p id="status">Scanning...</p>
 </div>
-
-
 
 
 <script src="/javascripts/qrparser.min.js"></script>
